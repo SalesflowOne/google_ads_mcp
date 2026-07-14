@@ -1,0 +1,9 @@
+# Copy this file to google-ads.yaml and fill in your Google Ads API
+# credentials. See README.md for setup instructions.
+developer_token: INSERT_DEVELOPER_TOKEN_HERE
+client_id: INSERT_OAUTH_CLIENT_ID_HERE
+client_secret: INSERT_OAUTH_CLIENT_SECRET_HERE
+refresh_token: INSERT_OAUTH_REFRESH_TOKEN_HERE
+# Optional: manager account ID when querying client accounts.
+# login_customer_id: INSERT_MANAGER_CUSTOMER_ID_HERE
+use_proto_plus: True

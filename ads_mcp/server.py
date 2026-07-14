@@ -22,7 +22,7 @@ from ads_mcp.scripts.generate_views import update_views_yaml
 from ads_mcp.tools import accounts
 from ads_mcp.tools import docs
 from ads_mcp.tools import reporting
-from ads_mcp.tools._utils import get_ads_client
+from ads_mcp.tools._utils import warn_if_credentials_missing
 import dotenv
 from fastmcp.server.auth.providers.google import GoogleProvider
 from fastmcp.server.auth.providers.google import GoogleTokenVerifier
@@ -62,7 +62,7 @@ if os.getenv("FASTMCP_SERVER_AUTH_GOOGLE_CLIENT_ID") and os.getenv(
 def main():
   """Initializes and runs the MCP server."""
   asyncio.run(update_views_yaml())  # Check and update docs resource
-  get_ads_client()  # Check Google Ads credentials
+  warn_if_credentials_missing()
   print("mcp server starting...")
   mcp_server.run(
       transport="streamable-http",

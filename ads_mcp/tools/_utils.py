@@ -15,6 +15,8 @@
 """Common utilities for Google Ads API MCP tools."""
 
 import os
+import sys
+
 from ads_mcp.utils import ROOT_DIR
 from fastmcp.server.dependencies import get_access_token
 from google.ads.googleads.client import GoogleAdsClient
@@ -22,6 +24,26 @@ from google.oauth2.credentials import Credentials
 import yaml
 
 _ADS_CLIENT: GoogleAdsClient | None = None
+
+
+def get_credentials_path() -> str:
+  """Returns the configured Google Ads credentials file path."""
+  default_path = f"{ROOT_DIR}/google-ads.yaml"
+  return os.environ.get("GOOGLE_ADS_CREDENTIALS", default_path)
+
+
+def warn_if_credentials_missing() -> None:
+  """Warns when credentials are missing without blocking server startup."""
+  credentials_path = get_credentials_path()
+  if os.path.isfile(credentials_path):
+    return
+  print(
+      "Warning: Google Ads credentials not found at "
+      f"{credentials_path}. Documentation tools are available; "
+      "API tools require a valid google-ads.yaml. "
+      "Copy google-ads.yaml.example to get started.",
+      file=sys.stderr,
+  )
 
 
 def get_ads_client() -> GoogleAdsClient:
@@ -42,12 +64,12 @@ def get_ads_client() -> GoogleAdsClient:
   if access_token:
     access_token = access_token.token
 
-  default_path = f"{ROOT_DIR}/google-ads.yaml"
-  credentials_path = os.environ.get("GOOGLE_ADS_CREDENTIALS", default_path)
+  credentials_path = get_credentials_path()
   if not os.path.isfile(credentials_path):
     raise FileNotFoundError(
-        "Google Ads credentials YAML file is not found. "
-        "Check [GOOGLE_ADS_CREDENTIALS] config."
+        "Google Ads credentials YAML file is not found at "
+        f"{credentials_path}. Set GOOGLE_ADS_CREDENTIALS or copy "
+        "google-ads.yaml.example to google-ads.yaml."
     )
 
   if access_token:

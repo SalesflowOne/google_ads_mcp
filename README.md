@@ -36,6 +36,8 @@ This tool requires you to have a `google-ads.yaml` file with your Google Ads API
 If you don't have one, you can generate it by running the following example from the `google-ads-python` library:
 [authentication example](https://github.com/googleads/google-ads-python/blob/main/examples/authentication/generate_user_credentials.py)
 
+Copy `google-ads.yaml.example` to `google-ads.yaml` in the project root (or your preferred path) and fill in your credentials. The server starts without credentials so documentation tools work immediately; API tools require a valid `google-ads.yaml`.
+
 Make sure your `google-ads.yaml` file contains the following keys:
 
 - `client_id`

@@ -23,17 +23,17 @@ from ads_mcp import server
 
 @mock.patch.dict(os.environ, {"USE_GOOGLE_OAUTH_ACCESS_TOKEN": "true"})
 @mock.patch("ads_mcp.server.mcp_server")
-@mock.patch("ads_mcp.server.get_ads_client")
+@mock.patch("ads_mcp.server.warn_if_credentials_missing")
 @mock.patch("ads_mcp.server.update_views_yaml", new_callable=mock.Mock)
 def test_main_with_oauth_env(
-    mock_update_views, mock_get_ads_client, mock_mcp_server
+    mock_update_views, mock_warn_credentials, mock_mcp_server
 ):
   """Tests main function with USE_GOOGLE_OAUTH_ACCESS_TOKEN set."""
   with mock.patch("ads_mcp.server.asyncio.run"):
     server.main()
 
   mock_update_views.assert_called_once()
-  mock_get_ads_client.assert_called_once()
+  mock_warn_credentials.assert_called_once()
   mock_mcp_server.run.assert_called_once_with(
       transport="streamable-http", show_banner=False
   )
@@ -43,16 +43,16 @@ def test_main_with_oauth_env(
 
 
 @mock.patch("ads_mcp.server.mcp_server")
-@mock.patch("ads_mcp.server.get_ads_client")
+@mock.patch("ads_mcp.server.warn_if_credentials_missing")
 @mock.patch("ads_mcp.server.update_views_yaml", new_callable=mock.Mock)
-def test_main_no_env(mock_update_views, mock_get_ads_client, mock_mcp_server):
+def test_main_no_env(mock_update_views, mock_warn_credentials, mock_mcp_server):
   """Tests main function with no env vars."""
   # pylint: disable=unused-argument
   with mock.patch("ads_mcp.server.asyncio.run"):
     server.main()
 
   mock_mcp_server.run.assert_called_once()
-  mock_get_ads_client.assert_called_once()
+  mock_warn_credentials.assert_called_once()
 
 
 def test_mutations_disabled_by_default():
@@ -64,7 +64,7 @@ def test_mutations_disabled_by_default():
   with mock.patch.dict(os.environ, {}, clear=True):
     # We need to mock get_ads_client and update_views_yaml to avoid actual calls
     with (
-        mock.patch("ads_mcp.server.get_ads_client"),
+        mock.patch("ads_mcp.server.warn_if_credentials_missing"),
         mock.patch("ads_mcp.server.update_views_yaml"),
         mock.patch("ads_mcp.server.mcp_server"),
     ):
@@ -83,7 +83,7 @@ def test_mutations_enabled():
 
   with mock.patch.dict(os.environ, {"ADS_MCP_ENABLE_MUTATIONS": "true"}):
     with (
-        mock.patch("ads_mcp.server.get_ads_client"),
+        mock.patch("ads_mcp.server.warn_if_credentials_missing"),
         mock.patch("ads_mcp.server.update_views_yaml"),
         mock.patch("ads_mcp.server.mcp_server"),
     ):
