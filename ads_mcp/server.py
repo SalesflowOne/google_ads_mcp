@@ -59,6 +59,12 @@ if os.getenv("FASTMCP_SERVER_AUTH_GOOGLE_CLIENT_ID") and os.getenv(
   )
 
 
+@mcp_server.custom_route("/health", methods=["GET"])
+async def health_check(_request):
+  """Lightweight health endpoint for container orchestration."""
+  return {"status": "ok", "service": "google-ads-mcp"}
+
+
 def main():
   """Initializes and runs the MCP server."""
   asyncio.run(update_views_yaml())  # Check and update docs resource

@@ -32,8 +32,27 @@ def get_credentials_path() -> str:
   return os.environ.get("GOOGLE_ADS_CREDENTIALS", default_path)
 
 
+def ensure_credentials_file() -> None:
+  """Creates a minimal credentials file from env when only developer_token is set."""
+  credentials_path = get_credentials_path()
+  if os.path.isfile(credentials_path):
+    return
+  developer_token = os.getenv("GOOGLE_ADS_DEVELOPER_TOKEN")
+  if not developer_token:
+    return
+  credentials_dir = os.path.dirname(credentials_path)
+  if credentials_dir:
+    os.makedirs(credentials_dir, exist_ok=True)
+  with open(credentials_path, "w", encoding="utf-8") as f:
+    yaml.dump(
+        {"developer_token": developer_token, "use_proto_plus": True},
+        f,
+    )
+
+
 def warn_if_credentials_missing() -> None:
   """Warns when credentials are missing without blocking server startup."""
+  ensure_credentials_file()
   credentials_path = get_credentials_path()
   if os.path.isfile(credentials_path):
     return
