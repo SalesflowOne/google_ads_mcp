@@ -40,6 +40,8 @@ Add an **A record** in your DNS provider:
 
 ```
 google-ads-mcp.oweb.one  →  5.161.179.117
+
+DNS is managed in **Cloudflare** (authoritative NS for `oweb.one`: `brynne.ns.cloudflare.com`, `carter.ns.cloudflare.com`). Create an **A** record with name `google-ads-mcp`, content `5.161.179.117`, proxy **off** (DNS only) so Coolify/Traefik can issue Let's Encrypt certs.
 ```
 
 `oweb.one` nameservers are Cloudflare (`brynne.ns.cloudflare.com`, `carter.ns.cloudflare.com`).
