@@ -74,6 +74,8 @@ def main():
   mcp_server.run(
       transport="streamable-http",
       show_banner=False,
+      host=os.getenv("FASTMCP_HOST", "0.0.0.0"),
+      port=int(os.getenv("PORT", "8000")),
   )  # Initialize and run the server
 
 

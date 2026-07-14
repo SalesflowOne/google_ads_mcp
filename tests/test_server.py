@@ -35,7 +35,10 @@ def test_main_with_oauth_env(
   mock_update_views.assert_called_once()
   mock_warn_credentials.assert_called_once()
   mock_mcp_server.run.assert_called_once_with(
-      transport="streamable-http", show_banner=False
+      transport="streamable-http",
+      show_banner=False,
+      host="0.0.0.0",
+      port=8000,
   )
   # Verify auth set (hard to verify exact type without exposing it better,
   # but we can check if it was accessed/set if we mock it differently,
