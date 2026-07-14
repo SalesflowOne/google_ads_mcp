@@ -26,6 +26,7 @@ from ads_mcp.tools._utils import warn_if_credentials_missing
 import dotenv
 from fastmcp.server.auth.providers.google import GoogleProvider
 from fastmcp.server.auth.providers.google import GoogleTokenVerifier
+from starlette.responses import JSONResponse
 
 dotenv.load_dotenv()
 
@@ -62,7 +63,7 @@ if os.getenv("FASTMCP_SERVER_AUTH_GOOGLE_CLIENT_ID") and os.getenv(
 @mcp_server.custom_route("/health", methods=["GET"])
 async def health_check(_request):
   """Lightweight health endpoint for container orchestration."""
-  return {"status": "ok", "service": "google-ads-mcp"}
+  return JSONResponse({"status": "ok", "service": "google-ads-mcp"})
 
 
 def main():
